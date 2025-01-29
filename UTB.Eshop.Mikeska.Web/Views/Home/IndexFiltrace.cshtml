@@ -1,0 +1,133 @@
+﻿@using Microsoft.AspNetCore.Routing
+@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+@{
+    if (Model != null && Model.Kategories.Count > 0)
+    {
+        <ul class="ulmenucla">
+            @{
+                foreach (var itemKategorie in Model.Kategories)
+                {
+                    @if (Language.languages == "CZ")
+                    {
+                        <li><a class="limenucla" asp-action="IndexFiltrace" asp-route-id="@itemKategorie.ID">@itemKategorie.katCZ</a></li>
+                    }
+                    else
+                    {
+                        <li><a class="limenucla" asp-action="IndexFiltrace" asp-route-id="@itemKategorie.ID">@itemKategorie.katEN</a></li>
+                    }
+
+                }
+            }
+        </ul>
+    }
+}
+
+@{
+    if (Model != null && Model.Products != null && Model.Products.Count > 0)
+    {
+        <section class="py-5">
+            <div class="container px-4 px-lg-5 mt-5">
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                    @{
+                        for (int i = 0; i < Model.Products.Count && i < 6; ++i)
+                        {
+                            int t = 0;
+                            if (Url.ActionContext.HttpContext.Request.Query.ContainsKey("pag")) t = Int32.Parse((string)Url.ActionContext.HttpContext.Request.Query["pag"]);
+                            if (t * 6 + i >= Model.Products.Count) continue;
+                            var product = Model.Products[t * 6 + i];
+                            <div class="col mb-5">
+                                <div class="card h-100">
+                                    <!-- Product image-->
+                                    @if (Language.languages == "CZ")
+                                    {
+                                        <img class="card-img-top" src="@product.ImageSrc" alt="Zvíře: " @product.NameCZ />
+                                    }
+                                    else
+                                    {
+                                        <img class="card-img-top" src="@product.ImageSrc" alt="Animal: " @product.NameEN />
+                                    }
+                                    <!-- Product details-->
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <!-- Product name-->
+                                            @if (Language.languages == "CZ")
+                                            {
+                                                <h5 class="fw-bolder">@product.NameCZ</h5>
+                                            }
+                                            else
+                                            {
+                                                <h5 class="fw-bolder">@product.NameEN</h5>
+                                            }
+
+                                            <!-- Product price-->
+                                            @{
+                                                double totalPrice = product.Price;
+                                                @totalPrice.ToString("C2")
+                                            }
+                                        </div>
+                                    </div>
+                                    <!-- Product actions-->
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        @if (Language.languages == "CZ")
+                                        {
+                                            <div class="text-center">
+                                                <a asp-action="Description" asp-route-id="@product.ID" class="btn btn-outline-dark flex-shrink-0">popis</a>
+
+                                            </div>
+
+                                            <div class="text-center">
+                                                <button class="btn btn-outline-dark flex-shrink-0" type="button" onclick=" Buy(@product.ID,'@Url.Action("AddOrderItemsToSession", "CustomerOrderNotCart" , new { Area="Customer" })', '#total_price' , '@System.Globalization.CultureInfo.CurrentCulture.Name' )">
+                                                    <i class="bi-cart-fill me-1"></i>
+                                                    Koupit
+                                                </button>
+
+                                            </div>
+
+                                        }
+                                        else
+                                        {
+                                            <div class="text-center">
+                                                <a asp-action="Description" asp-route-id="@product.ID" class="btn btn-outline-dark flex-shrink-0">Description</a>
+
+                                            </div>
+
+                                            <div class="text-center">
+                                                <button class="btn btn-outline-dark flex-shrink-0" type="button" onclick=" Buy(@product.ID,'@Url.Action("AddOrderItemsToSession", "CustomerOrderNotCart" , new { Area="Customer" })', '#total_price' , '@System.Globalization.CultureInfo.CurrentCulture.Name' )">
+                                                    <i class="bi-cart-fill me-1"></i>
+                                                    Buy
+                                                </button>
+
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </section>
+        for (int i = 0; i < MathF.Ceiling((float)Model.Products.Count / 6); ++i)
+        {
+            <a asp-action="IndexFiltrace" asp-route-id="@Model.Products[0].IdKategories" asp-route-pag="@i">@(i + 1)</a>
+        }
+    }
+}
+
+@section Scripts
+    {
+    <link href="~/css/Products.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <environment include="Development">
+        <script src="~/js/Product.js"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="~/js/Product.min.js"></script>
+    </environment>
+}

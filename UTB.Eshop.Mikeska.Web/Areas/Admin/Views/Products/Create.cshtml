@@ -1,0 +1,21 @@
+﻿@model ProductModelEdit
+
+@{
+    ViewData["Title"] = "Create";
+    ViewBag.Akce = "Create";
+}
+
+<h1>Create</h1>
+
+<partial name="EditFormProduct" model="Model" />
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section Scripts
+    {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/FileContentValidation.js"></script>
+}
+
+
+

@@ -1,0 +1,74 @@
+﻿@model ProductViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@{
+    if (Model != null && Model.Products.Count > 0 && Model.Kategories.Count > 0)
+    {
+        <table class=" table table-responsive">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Products[0].ImageSrc)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Products[0].NameCZ)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Products[0].NameEN)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Kategories[0].katCZ)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Products[0].Price)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(mode => item.ImageSrc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NameCZ)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.NameEN)
+                        </td>
+                        <td>
+                            @{
+                                Kategorie x = Model.Kategories.FirstOrDefault(o=>o.ID==item.IdKategories);
+                                if (x != null)
+                                {
+                                    @Html.DisplayFor(modelItem => x.katCZ)
+                                }else{
+                                    @Html.DisplayFor(modelItem => item.IdKategories)
+                                }
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+

@@ -1,0 +1,45 @@
+﻿@model CarouselSlide
+
+@{
+    if (ViewBag.Akce != null)
+    {
+        <p>@ViewBag.Akce</p>
+        <form asp-action="@ViewBag.Akce" method="post" enctype="multipart/form-data">
+            @{
+                if (ViewBag.Akce == "Edit")
+                {
+                    <input asp-for="ID" type="hidden" />
+                }
+            }
+            <div asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Image">Image</label>
+                @{
+                    if (ViewBag.Akce == "Edit")
+                    {
+                        <p>a</p>
+                        <input asp-for="Image" class="form-control-file" multiple>
+                    }
+                    else
+                    {
+                        <p>b</p>
+                        <input asp-for="Image" class="form-control-file" data-val-required="The Image field is required.">
+                    }
+                }
+                <span asp-validation-for="Image"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageAltCZ">Image ssAlternative Text CZ</label>
+                <input asp-for="ImageAltCZ" class="form-control" placeholder="Enter alternative text ...">
+                <span asp-validation-for="ImageAltCZ"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageAltEN">Image Alternative Text EN</label>
+                <input asp-for="ImageAltEN" class="form-control" placeholder="Enter alternative text ...">
+                <span asp-validation-for="ImageAltEN"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    }
+}

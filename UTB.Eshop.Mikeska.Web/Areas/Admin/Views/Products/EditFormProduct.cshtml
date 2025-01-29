@@ -1,0 +1,81 @@
+﻿@model ProductModelEdit
+@{
+    if (ViewBag.Akce != null)
+    {
+        <form asp-action="@ViewBag.Akce" method="post" enctype="multipart/form-data">
+            @{
+                if (ViewBag.Akce == "Edit")
+                {
+                    <input asp-for="@Model.ID" type="hidden" />
+                }
+            }
+            <div asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="@Model.Image">Image</label>
+                @{
+                    if (ViewBag.Akce == "Edit")
+                    {
+                        <input asp-for="@Model.Image" class="form-control-file">
+                    }
+                    else
+                    {
+                        <input asp-for="@Model.Image" class="form-control-file" data-val-required="The Image field is required.">
+                    }
+                }
+                <span asp-validation-for="@Model.Image"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.Price" class="control-label"></label>
+                <input asp-for="@Model.Price" class="form-control" />
+                <span asp-validation-for="@Model.Price" class="text-danger"></span>
+            </div>
+            <h3>In czech</h3>
+            <div class="form-group">
+                <label asp-for="@Model.NameCZ">Name CZ</label>
+                <input asp-for="@Model.NameCZ" class="form-control" placeholder="Enter name in CZ">
+                <span asp-validation-for="@Model.NameCZ"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="@Model.DescriptionCZ">Description CZ</label>
+                <textarea asp-for="@Model.DescriptionCZ" rows="20" class="form-control" placeholder="Enter description text in CZ"></textarea>
+                <span asp-validation-for="@Model.DescriptionCZ"></span>
+            </div>
+            <hr>
+            <h3>In english</h3>
+            <div class="form-group">
+                <label asp-for="@Model.NameEN">Name EN</label>
+                <input asp-for="@Model.NameEN" class="form-control" placeholder="Enter name in EN">
+                <span asp-validation-for="@Model.NameEN"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="@Model.DescriptionCZ">Description EN</label>
+                <textarea asp-for="@Model.DescriptionEN" rows="20" class="form-control" placeholder="Enter description text in EN"></textarea>
+                <span asp-validation-for="@Model.DescriptionEN"></span>
+            </div>
+            @{
+                if (Model != null)
+                {
+                    <label asp-for="@Model.IdKategories">Select a customer:</label>
+                    <select asp-for="@Model.IdKategories">
+                        @foreach (var kateg in Model.Kategories)
+                        {
+ 
+                            if (Model.IdKategories == kateg.ID)
+                            {
+                                <option value="@kateg.ID" selected>@kateg.katCZ || @kateg.katEN</option>
+                            }
+                            else
+                            {
+                                <option value="@kateg.ID">@kateg.katCZ || @kateg.katEN</option>
+                            }
+                        }
+                    </select>
+
+                }
+            }
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    }
+}

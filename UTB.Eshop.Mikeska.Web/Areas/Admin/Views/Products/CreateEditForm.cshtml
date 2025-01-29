@@ -1,0 +1,36 @@
+﻿@model Product
+@{
+    if (ViewBag.Akce != null)
+    {
+        <form asp-action="@ViewBag.Akce" method="post" enctype="multipart/form-data">
+            @{
+                if (ViewBag.Akce == "Edit")
+                {
+                    <input asp-for="ID" type="hidden" />
+                }
+            }
+            <div asp-validation-summary="All"></div>
+            <div class="form-group">
+                <label asp-for="Image">Image</label>
+                @{
+                    if (ViewBag.Akce == "Edit")
+                    {
+                        <input asp-for="Image" class="form-control-file">
+                    }
+                    else
+                    {
+                        <input asp-for="Image" class="form-control-file" data-val-required="The Image field is required.">
+                    }
+                }
+                <span asp-validation-for="Image"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Name">Image Alternative Text CZ</label>
+                <input asp-for="Name" class="form-control" placeholder="Enter alternative text ...">
+                <span asp-validation-for="Name"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    }
+}
